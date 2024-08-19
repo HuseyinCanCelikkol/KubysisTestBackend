@@ -1,0 +1,6 @@
+@KubysisTestBackend_HostAddress = http://localhost:5138
+
+GET {{KubysisTestBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
