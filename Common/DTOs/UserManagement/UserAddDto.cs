@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Common.Enums.UserManagement;
 
 namespace Common.DTOs.UserManagement
 {
-	public sealed class UserAddDto
-	{
-	}
+	public record UserAddDto
+		(
+		string Name,
+		string Password,
+		string Email,
+		Role Role,
+		int CompanyId,
+		int CreateUserId
+		);
 }
