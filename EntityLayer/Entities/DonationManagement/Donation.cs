@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.Entities.DonationManagement
 {
-    internal class Donation : BaseEntity
+     public class Donation : BaseEntity
     {
         public required string NameAndSurname { get; set; }
         public DonationType? DonationType { get; set; }
@@ -21,5 +21,9 @@ namespace EntityLayer.Entities.DonationManagement
         public DonationStatus DonationStatus { get; set; }
 
         public string? Description { get; set; }
+        
+
+        
+
     }
 }

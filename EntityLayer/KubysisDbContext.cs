@@ -1,4 +1,5 @@
-﻿using EntityLayer.Entities.UserManagement;
+﻿using EntityLayer.Entities.DonationManagement;
+using EntityLayer.Entities.UserManagement;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityLayer
@@ -11,6 +12,13 @@ namespace EntityLayer
 		}
 
 		public DbSet<User> Users { get; set; }
+
+		public DbSet<Donation> Donations { get; set; }
+		
+
+		
+
+		
 
 	}
 }
