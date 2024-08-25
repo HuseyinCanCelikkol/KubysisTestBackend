@@ -14,7 +14,7 @@ namespace KubysisTestBackend.Controllers.DonationManagement
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<Response> AddUser([FromBody] DonationAddDto donationAddDto)
+        public async Task<Response> AddDonation([FromBody] DonationAddDto donationAddDto)
         {
             return await _donationService.AddDonationAsync(donationAddDto);
         }

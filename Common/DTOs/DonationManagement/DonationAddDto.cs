@@ -12,9 +12,8 @@ namespace Common.DTOs.DonationManagement
         string Name,
         string Passaword,
         string Email,
-        Role Role,
-        int CompanyId,
-        int CreateUserId
+        Role Role
+       
         );
    
 }
