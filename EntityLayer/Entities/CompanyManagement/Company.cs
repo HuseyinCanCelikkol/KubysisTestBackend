@@ -8,7 +8,7 @@ namespace EntityLayer.Entities.CompanyManagement
 		public required string Name { get; set; }
 		public required string LicenseKey { get; set; }
 		public DateTime LicenseKeyExpirationDate { get; set; }
-		public virtual ICollection<Users>? Employees { get; set; }
+		public virtual ICollection<User>? Employees { get; set; }
 
 	}
 }

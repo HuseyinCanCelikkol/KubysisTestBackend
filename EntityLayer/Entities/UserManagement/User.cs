@@ -4,7 +4,7 @@ using EntityLayer.Entities.CompanyManagement;
 
 namespace EntityLayer.Entities.UserManagement
 {
-	public class Users : BaseEntity
+	public class User : BaseEntity
 	{
 		public required string Name { get; set; }
 		public required string Password { get; set; }
