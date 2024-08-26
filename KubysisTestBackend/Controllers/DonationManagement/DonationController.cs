@@ -18,6 +18,5 @@ namespace KubysisTestBackend.Controllers.DonationManagement
         {
             return await _donationService.AddDonationAsync(donationAddDto);
         }
-
     }
 }

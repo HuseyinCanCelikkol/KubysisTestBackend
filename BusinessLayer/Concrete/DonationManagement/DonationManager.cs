@@ -14,15 +14,12 @@ namespace BusinessLayer.Concrete.DonationManagement
          
         public async Task<Response> AddDonationAsync(DonationAddDto donationAddDto)
         {
-
             try
             {
                 Donation donation = _mapper.Map<Donation>(donationAddDto);
                     await _context.AddAsync(donation);
                     await _context.SaveChangesAsync();
                     return Response.CreateSuccessResponse();
-
-
             }
             catch
             {

@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Common.Enums.DonationManagement
+﻿namespace Common.Enums.DonationManagement
 {
-    public enum DonationType
+	public enum DonationType
     {
         Sadaka=1,
         Adak,
         Akika,
-        Şükür,
-        Sünnet,
+        Sukur,
+        Sunnet,
         Ruhuna,
         Hacet,
         Kefaret,
-        Şifa,
+        Sifa,
         Vacip
-    
     }
 }
