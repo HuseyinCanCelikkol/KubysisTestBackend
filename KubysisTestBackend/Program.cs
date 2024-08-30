@@ -1,20 +1,42 @@
 using BusinessLayer.Abstract.CompanyManagement;
+using BusinessLayer.Abstract.DonationManagement;
 using BusinessLayer.Abstract.UserManagement;
 using BusinessLayer.Concrete.CompanyManagement;
+using BusinessLayer.Concrete.DonationManagement;
 using BusinessLayer.Concrete.UserManagement;
 using EntityLayer;
+using KubysisTestBackend.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // Add services to the container.
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserService,UserManager>();
+builder.Services.AddScoped<IDonationService,DonationManager>();
+builder.Services.AddDbContext<DataContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")	));
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+	.AddEntityFrameworkStores<DataContext>();
 builder.Services.AddScoped<ICompanyService,CompanyManager>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+	options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Name = "Authorization",
+		Type = SecuritySchemeType.ApiKey 
+
+	});
+	options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 builder.Services.AddDbContext<KubysisDbContext>(options =>
 	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
@@ -25,6 +47,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+app.MapIdentityApi<IdentityUser>();
 
 app.UseHttpsRedirection();
 
