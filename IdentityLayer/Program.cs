@@ -1,30 +1,27 @@
-using BusinessLayer.Abstract.CompanyManagement;
-using BusinessLayer.Abstract.DonationManagement;
-using BusinessLayer.Abstract.UserManagement;
-using BusinessLayer.Concrete.CompanyManagement;
-using BusinessLayer.Concrete.DonationManagement;
-using BusinessLayer.Concrete.UserManagement;
 using EntityLayer;
+using EntityLayer.Entities.UserManagement;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // Add services to the container.
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IUserService, UserManager>();
-builder.Services.AddScoped<IDonationService, DonationManager>();
-builder.Services.AddScoped<ICompanyService, CompanyManager>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<KubysisDbContext>(options =>
-	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddDbContext<KubysisIdentityDbContext>(options =>
 	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-	.AddEntityFrameworkStores<KubysisIdentityDbContext>();
+
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+	options.SignIn.RequireConfirmedAccount = true;
+	// Other Identity options can be configured here
+})
+	.AddEntityFrameworkStores<KubysisIdentityDbContext>()
+	.AddDefaultTokenProviders();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,4 +37,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.RunAsync();
+app.Run();

@@ -12,12 +12,12 @@ namespace KubysisTestBackend.Controllers.UserManagement
 	{
 		private readonly IUserService _userService = userService;
 
-		[HttpPost]
-		[AllowAnonymous]
-		public async Task<Response> AddUser([FromBody] UserAddDto userAddDto)
-		{
-			return await _userService.AddUserAsync(userAddDto);
-		}
+		//[HttpPost]
+		//[AllowAnonymous]
+		//public async Task<Response> AddUser([FromBody] UserAddDto userAddDto)
+		//{
+		//	return await _userService.AddUserAsync(userAddDto);
+		//}
 
 	}
 }

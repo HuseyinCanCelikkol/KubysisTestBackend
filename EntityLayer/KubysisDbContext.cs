@@ -8,7 +8,6 @@ namespace EntityLayer
 {
 	public sealed class KubysisDbContext(DbContextOptions<KubysisDbContext> options) : DbContext(options)
 	{
-		public DbSet<User> Users { get; set; }
 		public DbSet<Company> Companies { get; set; }
 		public DbSet<Donation> Donations { get; set; }
 
