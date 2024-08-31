@@ -19,9 +19,8 @@ namespace BusinessLayer.Concrete.SystemManagement.RoleManagement
 					return Response.CreateFailureResponse();
 				}
 
-				// Yeni rol oluştur
 				var role = new IdentityRole(addRoleDto.RoleName);
-				var result = await _roleManager.CreateAsync(role);
+				await _roleManager.CreateAsync(role);
 
 				return Response.CreateSuccessResponse();
 			}
