@@ -1,7 +1,6 @@
 ﻿using BusinessLayer.Abstract.SystemManagement.RoleManagement;
 using Common.Constant.SystemManagement.ResponseManagement;
 using Common.DTOs.SystemManagement.RoleManagement;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KubysisTestBackend.Controllers.SystemManagement.RoleManagement
@@ -13,8 +12,6 @@ namespace KubysisTestBackend.Controllers.SystemManagement.RoleManagement
 		private readonly IRoleService _roleService = roleService;
 
 		[HttpPost]
-		[AllowAnonymous]
-
 		public async Task<Response> AddRole([FromBody] AddRoleDto addRoleDto)
 		{
 			return await _roleService.AddRoleAsync(addRoleDto);

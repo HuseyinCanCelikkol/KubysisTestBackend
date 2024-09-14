@@ -7,8 +7,12 @@ using BusinessLayer.Concrete.CompanyManagement;
 using BusinessLayer.Concrete.DonationManagement;
 using BusinessLayer.Concrete.SystemManagement.RoleManagement;
 using EntityLayer;
+using KubysisTestBackend.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -28,6 +32,49 @@ builder.Services.AddDbContext<KubysisIdentityDbContext>(options =>
 	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 	.AddEntityFrameworkStores<KubysisIdentityDbContext>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options =>
+	{
+		var jwtSettings = builder.Configuration.GetSection("Jwt");
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuerSigningKey = true,
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings["Key"]!)),
+			ValidateIssuer = true,
+			ValidIssuer = jwtSettings["Issuer"],
+			ValidateAudience = true,
+			ValidAudience = jwtSettings["Audience"],
+			ValidateLifetime = true,
+			ClockSkew = TimeSpan.Zero
+		};
+		options.Events = new JwtBearerEvents
+		{
+			OnAuthenticationFailed = context =>
+			{
+				// Eğer token geçersizse, hata döndür
+				if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+				{
+					context.Response.Headers.Add("Token-Expired", "true");
+				}
+				context.Response.StatusCode = 401; // Unauthorized
+				return Task.CompletedTask;
+			},
+			OnChallenge = context =>
+			{
+				// Bu kısım da 401 Unauthorized döndürür
+				if (!context.Response.HasStarted)
+				{
+					context.Response.StatusCode = 401;
+					context.Response.ContentType = "application/json";
+				}
+				return Task.CompletedTask;
+			}
+		};
+	});
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,9 +85,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<JwtMiddleware>();
 app.UseAuthorization();
-
+app.UseAuthentication();
 app.MapControllers();
 
 await app.RunAsync();
