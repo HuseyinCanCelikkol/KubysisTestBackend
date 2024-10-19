@@ -1,0 +1,42 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+  ASPNETCORE_ENVIRONMENT: Development
+  DOTNET_USE_POLLING_FILE_WATCHER: "1"
+
+stages:
+  - build
+  - test
+  - deploy
+
+before_script:
+  - apk add --no-cache bash curl
+  - echo "Docker daemon is ready."
+
+build:
+  stage: build
+  script:
+    - docker build -t kubysistestbackend:dev .
+
+test:
+  stage: test
+  script:
+    - docker scan kubysistestbackend:dev --accept-license --json
+
+deploy:
+  stage: deploy
+  script:
+    - docker run -dt \
+        -v "$CI_PROJECT_DIR/vsdbg:/remote_debugger:rw" \
+        -v "$HOME/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro" \
+        -v "$HOME/.aspnet/https:/root/.aspnet/https:ro" \
+        -e "ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT" \
+        -e "DOTNET_USE_POLLING_FILE_WATCHER=$DOTNET_USE_POLLING_FILE_WATCHER" \
+        -P \
+        --name kubysistestbackend \
+        --entrypoint dotnet kubysistestbackend:dev \
+        /VSTools/DistrolessHelper/DistrolessHelper.dll --wait
