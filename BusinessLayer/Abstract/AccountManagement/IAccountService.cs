@@ -9,7 +9,7 @@ namespace BusinessLayer.Abstract.AccountManagement
 	{
 		Task<Response> AddUserAsync(UserAddDto userAddDto);
 		Task<Response<string>> GetJwtTokenAsync(LoginModel loginModel);
-		Task<Response<string>> LoginAsync(UserLoginDto userLoginDto);
+		Task<Response<UserInformationsDto>> LoginAsync(UserLoginDto userLoginDto);
 
     }
 }

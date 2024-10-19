@@ -9,6 +9,7 @@ namespace BusinessLayer.Mappings.DonationManagement
         public DonationMappingProfile() 
         {
             CreateMap<DonationAddDto,Donation>().ReverseMap();
+            CreateMap<DonationGetDto,Donation>().ReverseMap();
         }
     }
 }

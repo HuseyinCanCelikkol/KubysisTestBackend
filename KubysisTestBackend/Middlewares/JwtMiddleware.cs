@@ -14,7 +14,7 @@ public class JwtMiddleware(RequestDelegate next, IConfiguration configuration)
 		var token = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ")[^1];
 		if (token != null && token.Length > 1)
 		{
-			AttachUserToContext(context, token);
+			await AttachUserToContext(context, token);
 		}
 		
 		await _next(context);

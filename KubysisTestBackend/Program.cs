@@ -7,6 +7,7 @@ using BusinessLayer.Concrete.CompanyManagement;
 using BusinessLayer.Concrete.DonationManagement;
 using BusinessLayer.Concrete.SystemManagement.RoleManagement;
 using EntityLayer;
+using EntityLayer.Entities.UserManagement;
 using KubysisTestBackend.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +31,7 @@ builder.Services.AddDbContext<KubysisDbContext>(options =>
 	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<KubysisIdentityDbContext>(options =>
 	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
 	.AddEntityFrameworkStores<KubysisIdentityDbContext>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -55,7 +56,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 				// Eğer token geçersizse, hata döndür
 				if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
 				{
-					context.Response.Headers.Add("Token-Expired", "true");
+					context.Response.Headers.Append("Token-Expired", "true");
 				}
 				context.Response.StatusCode = 401; // Unauthorized
 				return Task.CompletedTask;
@@ -73,6 +74,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 		};
 	});
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -83,7 +94,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
-
+app.UseCors("AllowAllOrigins");
 app.UseHttpsRedirection();
 app.UseMiddleware<JwtMiddleware>();
 app.UseAuthorization();

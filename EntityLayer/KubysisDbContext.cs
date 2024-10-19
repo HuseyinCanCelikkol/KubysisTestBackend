@@ -13,7 +13,8 @@ namespace EntityLayer
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            modelBuilder.Ignore<User>();
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
 			{
 				foreach (var property in entityType.GetProperties())
 				{

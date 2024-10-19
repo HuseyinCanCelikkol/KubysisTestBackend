@@ -28,7 +28,7 @@ namespace KubysisTestBackend.Controllers.SystemManagement.AccountManagement
 
 		[AllowAnonymous]
 		[HttpPost]
-		public async Task<Response<string>> Login([FromBody] UserLoginDto userLoginDto)
+		public async Task<Response<UserInformationsDto>> Login([FromBody] UserLoginDto userLoginDto)
 		{
 			return await _accountService.LoginAsync(userLoginDto);
 		}

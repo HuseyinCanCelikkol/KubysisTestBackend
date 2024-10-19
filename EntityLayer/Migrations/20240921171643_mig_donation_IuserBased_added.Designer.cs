@@ -3,6 +3,7 @@ using System;
 using EntityLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EntityLayer.Migrations
 {
     [DbContext(typeof(KubysisDbContext))]
-    partial class KubysisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240921171643_mig_donation_IuserBased_added")]
+    partial class mig_donation_IuserBased_added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace EntityLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.DonationManagement.Donation", b =>
@@ -103,7 +106,7 @@ namespace EntityLayer.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Donations", (string)null);
+                    b.ToTable("Donations");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.DonationManagement.Donation", b =>

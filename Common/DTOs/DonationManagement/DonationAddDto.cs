@@ -11,6 +11,7 @@ namespace Common.DTOs.DonationManagement
         string PhoneNumber,
 		DonationStatus DonationStatus,
 		string? Description,
-		int CreateUserId
+		string CreateUserId,
+		int CompanyId
 	);
 }

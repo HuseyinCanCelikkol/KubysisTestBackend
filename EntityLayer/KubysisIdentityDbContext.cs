@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EntityLayer.Entities.UserManagement;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace EntityLayer
 {
-	public class KubysisIdentityDbContext(DbContextOptions<KubysisIdentityDbContext> options) : IdentityDbContext<IdentityUser>(options)
+    public class KubysisIdentityDbContext(DbContextOptions<KubysisIdentityDbContext> options) : IdentityDbContext<User>(options)
 	{
 		protected override void OnModelCreating(ModelBuilder builder)
 		{

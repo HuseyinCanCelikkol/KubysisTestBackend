@@ -3,6 +3,7 @@ using System;
 using EntityLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EntityLayer.Migrations
 {
     [DbContext(typeof(KubysisDbContext))]
-    partial class KubysisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240920173407_mig_company_relation_added_to_donation")]
+    partial class mig_company_relation_added_to_donation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace EntityLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.DonationManagement.Donation", b =>
@@ -68,10 +71,6 @@ namespace EntityLayer.Migrations
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("CreateUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -96,14 +95,11 @@ namespace EntityLayer.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("UpdateUserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Donations", (string)null);
+                    b.ToTable("Donations");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.DonationManagement.Donation", b =>
