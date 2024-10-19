@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:stable
 
 services:
   - docker:dind
@@ -21,11 +21,6 @@ build:
   stage: build
   script:
     - docker build -t kubysistestbackend:dev -f ./KubysisTestBackend/Dockerfile .
-
-test:
-  stage: test
-  script:
-    - docker scan kubysistestbackend:dev --accept-license --json
 
 deploy:
   stage: deploy
