@@ -14,4 +14,4 @@ services:
       - ./vsdbg:/remote_debugger:rw
       - $HOME/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
       - $HOME/.aspnet/https:/root/.aspnet/https:ro
-    entrypoint: ["dotnet", "/VSTools/DistrolessHelper/DistrolessHelper.dll", "--wait"]
+    entrypoint: ["dotnet", "KubysisTestBackend.dll"]
