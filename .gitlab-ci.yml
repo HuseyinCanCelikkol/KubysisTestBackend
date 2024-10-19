@@ -20,7 +20,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker build -t kubysistestbackend:dev .
+    - docker build -t kubysistestbackend:dev ./KubysisTestBackend
 
 test:
   stage: test
