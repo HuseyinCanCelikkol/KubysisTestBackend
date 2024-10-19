@@ -9,6 +9,8 @@ namespace BusinessLayer.Mappings.UserManagement
 		public UserMappingProfile()
 		{
 			CreateMap<UserAddDto, User>().ReverseMap();
+			CreateMap<UserGetByCompanyIdDto, User>().ReverseMap();
+			CreateMap<UserGetByIdDto, User>().ReverseMap();
 		}
 	}
 }

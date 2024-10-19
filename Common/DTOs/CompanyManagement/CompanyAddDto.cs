@@ -2,5 +2,6 @@
 {
 	public record CompanyAddDto(string Name,
 							 string LicenseKey,
-							 DateTime LicenseKeyExpirationDate);
+							 DateTime LicenseKeyExpirationDate
+					);
 }

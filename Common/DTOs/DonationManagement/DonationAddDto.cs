@@ -1,19 +1,17 @@
-﻿using Common.Enums.UserManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Common.Enums.DonationManagement;
 
 namespace Common.DTOs.DonationManagement
 {
-    public record DonationAddDto
+	public record DonationAddDto
     (              
-        string Name,
-        string Passaword,
-        string Email,
-        Role Role
-       
-        );
-   
+        string NameAndSurname,
+		DonationType? DonationType,
+		DonationClass DonationClass,
+		int Amount,
+        string PhoneNumber,
+		DonationStatus DonationStatus,
+		string? Description,
+		string CreateUserId,
+		int CompanyId
+	);
 }

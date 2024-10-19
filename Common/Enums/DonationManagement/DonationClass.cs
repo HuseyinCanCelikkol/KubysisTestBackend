@@ -1,37 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Common.Enums.DonationManagement
+﻿namespace Common.Enums.DonationManagement
 {
-    public enum  DonationClass
+	public enum  DonationClass
     {
-        KüçükBas=1,
-        Keçi,
-        BüyükBas,
+        KucukBas=1,
+        Keci,
+        BuyukBas,
         HisseliSuKuyusu,
-        İsmeÖzelSuKuyusu,
-        KuranıKerim,
+        IsmeOzelSuKuyusu,
+        KuraniKerim,
         Ekmek,
-        GazzeYardımı,
-        SıcakYemek,
+        GazzeYardimi,
+        SicakYemek,
         Pasta,
-        SutKeçisi,
+        SutKecisi,
         KuranOkutma,
         MutlulukPaketi,
         YetimGiydirme,
-        UnDağıtımı,
+        UnDağitimi,
         YetimHamiliği,
         ArkanBambuEv,
-        CamıMescit,
-        EğitimYardımı,
-        GıdaKolisi,
-        Diğer,
-        Diğer2,
-        Diğer3,
-        Diğer4,
-        Diğer5,
+        CamiMescit,
+        EgitimYardimi,
+        GidaKolisi,
+        Diger
     }
 }
