@@ -23,13 +23,13 @@ build:
   stage: build
   script:
     - docker build -t $IMAGE_NAME -f ./KubysisTestBackend/Dockerfile .
-    - echo "Docker build completed: $IMAGE_NAME"
+    
 
 push:
   stage: push
   script:
     - docker push $IMAGE_NAME
-    - echo "Docker image pushed to registry: $IMAGE_NAME"
+    
 
 deploy:
   stage: deploy
