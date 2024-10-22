@@ -36,7 +36,7 @@ sonarqube-check:
 build:
   stage: build
   before_script:
-  - apt-get install -y bash curl
+  - apk add --no-cache bash curl  # Docker görüntüsünde Alpine kullanıyorsanız
   - echo "Docker daemon is ready."
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
   script:
@@ -45,7 +45,7 @@ build:
 push:
   stage: push
   before_script:
-  - apt-get install -y bash curl
+  - apk add --no-cache bash curl  # Docker görüntüsünde Alpine kullanıyorsanız
   - echo "Docker daemon is ready."
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
   script:
@@ -55,7 +55,7 @@ deploy:
   stage: deploy
   image: docker/compose:latest
   before_script:
-  - apt-get install -y bash curl
+  - apk add --no-cache bash curl  # Docker görüntüsünde Alpine kullanıyorsanız
   - echo "Docker daemon is ready."
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
   script:
