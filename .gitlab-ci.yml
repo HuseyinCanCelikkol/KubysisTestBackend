@@ -12,16 +12,30 @@ variables:
   GIT_DEPTH: "0"  # Tüm dalları almak için
 
 stages:
+  - sonarqube-check
   - build
   - push
   - deploy
-  - sonarqube-check
-  - sonarqube-vulnerability-report
 
 before_script:
   - apk add --no-cache bash curl
   - echo "Docker daemon is ready."
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+
+sonarqube-check:
+  stage: sonarqube-check
+  script: 
+    - "dotnet tool install --global dotnet-sonarscanner"
+    - "export PATH=\"$PATH:$HOME/.dotnet/tools\""
+    - "dotnet sonarscanner begin /k:\"root_KubysisTestBackend_bf7c356a-4e9c-4183-b930-35911291e5e3\" /d:sonar.token=\"$SONAR_TOKEN\" /d:\"sonar.host.url=$SONAR_HOST_URL\" "
+    - "dotnet build"
+    - "dotnet sonarscanner end /d:sonar.token=\"$SONAR_TOKEN\""
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_BRANCH == 'develop
 
 build:
   stage: build
@@ -40,32 +54,3 @@ deploy:
     - docker-compose -f docker-compose.yml pull
     - docker-compose -f docker-compose.yml up -d
 
-sonarqube-check:
-  stage: sonarqube-check
-  script: 
-    - "dotnet tool install --global dotnet-sonarscanner"
-    - "export PATH=\"$PATH:$HOME/.dotnet/tools\""
-    - "dotnet sonarscanner begin /k:\"root_KubysisTestBackend_bf7c356a-4e9c-4183-b930-35911291e5e3\" /d:sonar.token=\"$SONAR_TOKEN\" /d:\"sonar.host.url=$SONAR_HOST_URL\" "
-    - "dotnet build"
-    - "dotnet sonarscanner end /d:sonar.token=\"$SONAR_TOKEN\""
-  allow_failure: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'master'
-    - if: $CI_COMMIT_BRANCH == 'main'
-    - if: $CI_COMMIT_BRANCH == 'develop'
-
-sonarqube-vulnerability-report:
-  stage: sonarqube-vulnerability-report
-  script:
-    - 'curl -u "${SONAR_TOKEN}:" "${SONAR_HOST_URL}/api/issues/gitlab_sast_export?projectKey=root_KubysisTestBackend_bf7c356a-4e9c-4183-b930-35911291e5e3&branch=${CI_COMMIT_BRANCH}&pullRequest=${CI_MERGE_REQUEST_IID}" -o gl-sast-sonar-report.json'
-  allow_failure: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'master'
-    - if: $CI_COMMIT_BRANCH == 'main'
-    - if: $CI_COMMIT_BRANCH == 'develop'
-  artifacts:
-    expire_in: 1 day
-    reports:
-      sast: gl-sast-sonar-report.json
