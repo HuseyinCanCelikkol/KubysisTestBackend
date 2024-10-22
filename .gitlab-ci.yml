@@ -34,19 +34,19 @@ sonarqube-check:
     - if: $CI_COMMIT_BRANCH == 'main'
 
   after_script:
-    - |
-      echo "Checking SonarQube Quality Gate status..."
-      STATUS="PENDING"
-      while [ "$STATUS" != "OK" ] && [ "$STATUS" != "ERROR" ]; do
-        STATUS=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY" \
-                  | jq -r .projectStatus.status)
-        echo "SonarQube status: $STATUS"
-        sleep 5
-      done
-      if [ "$STATUS" == "ERROR" ]; then
-        echo "SonarQube Quality Gate failed!"
-        exit 1
-      fi
+  - |
+    echo "Checking SonarQube Quality Gate status..."
+    STATUS="PENDING"
+    while [ "$STATUS" != "OK" ] && [ "$STATUS" != "ERROR" ]; do
+      RESPONSE=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY")
+      STATUS=$(echo $RESPONSE | grep -o '"status":"[^"]*' | grep -o '[^"]*$')
+      echo "SonarQube status: $STATUS"
+      sleep 5
+    done
+    if [ "$STATUS" == "ERROR" ]; then
+      echo "SonarQube Quality Gate failed!"
+      exit 1
+    fi
       
 build:
   stage: build
