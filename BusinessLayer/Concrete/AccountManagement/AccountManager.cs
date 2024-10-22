@@ -55,6 +55,27 @@ namespace BusinessLayer.Concrete.AccountManagement
                     Email = userAddDto.Email,
                     CompanyId = userAddDto.CompanyId
                 };
+                int a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
+                a = 123;
 
                 IdentityResult result = await _userManager.CreateAsync(user, userAddDto.Password);
                 if (!result.Succeeded)
