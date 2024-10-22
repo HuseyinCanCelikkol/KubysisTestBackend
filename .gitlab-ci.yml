@@ -24,6 +24,7 @@ before_script:
 
 sonarqube-check:
   stage: sonarqube-check
+  image: mcr.microsoft.com/dotnet/sdk:8.0
   script: 
     - "dotnet tool install --global dotnet-sonarscanner"
     - "export PATH=\"$PATH:$HOME/.dotnet/tools\""
