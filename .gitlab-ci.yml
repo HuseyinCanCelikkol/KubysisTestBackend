@@ -20,12 +20,13 @@ stages:
 before_script:
   - apt-get install -y bash curl
   - echo "Docker daemon is ready."
-  - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+
 
 sonarqube-check:
   stage: sonarqube-check
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script: 
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - "dotnet tool install --global dotnet-sonarscanner"
     - "export PATH=\"$PATH:$HOME/.dotnet/tools\""
     - "dotnet sonarscanner begin /k:\"root_KubysisTestBackend_bf7c356a-4e9c-4183-b930-35911291e5e3\" /d:sonar.token=\"$SONAR_TOKEN\" /d:\"sonar.host.url=$SONAR_HOST_URL\" "
