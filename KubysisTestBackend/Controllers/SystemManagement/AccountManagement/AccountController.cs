@@ -39,8 +39,11 @@ namespace KubysisTestBackend.Controllers.SystemManagement.AccountManagement
         [HttpGet]
         public Response<string> Deneme()
         {
-            var res = new Response<string>();
-            res.Data = _configuration["SECRET_KEY"];
+            Response<string> res = new()
+            {
+                Data = Environment.GetEnvironmentVariable("SECRET_KEY")
+            };
+
             return res;
         }
     }
