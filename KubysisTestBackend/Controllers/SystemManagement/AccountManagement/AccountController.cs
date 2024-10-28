@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Abstract.AccountManagement;
+﻿using AutoMapper;
+using BusinessLayer.Abstract.AccountManagement;
 using Common.Constant.SystemManagement.ResponseManagement;
 using Common.DTOs.AccountManagement;
 using Common.DTOs.UserManagement;
@@ -32,13 +33,15 @@ namespace KubysisTestBackend.Controllers.SystemManagement.AccountManagement
 		{
 			return await _accountService.LoginAsync(userLoginDto);
 		}
+
         [AllowAnonymous]
         [HttpGet]
-		public string Deneme()
+		public async Task<Response<string>> Deneme()
 		{
+			var res = new Response<string>();
             var userSecret = Environment.GetEnvironmentVariable("SECRET_KEY");
-
-			return userSecret;
+			res.Data = userSecret;
+			return res;
         }
 	}
 }
