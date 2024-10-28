@@ -8,11 +8,12 @@ services:
       - "8080:80"
       - "8081:80"
     environment:
+      SECRET_KEY: ${SECRET_KEY}
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
       DOTNET_USE_POLLING_FILE_WATCHER: ${DOTNET_USE_POLLING_FILE_WATCHER:-1}
     volumes:
       - ./vsdbg:/remote_debugger:rw
-      - /c/Users/husey/AppData/Roaming/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - $HOME/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
       - $HOME/.aspnet/https:/root/.aspnet/https:ro
     entrypoint: ["dotnet", "KubysisTestBackend.dll"]
     networks:
