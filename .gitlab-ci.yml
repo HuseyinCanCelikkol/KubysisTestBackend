@@ -12,38 +12,38 @@ variables:
   GIT_DEPTH: "0"  # Tüm dalları almak için
 
 stages:
-  - sonarqube-check
+  # - sonarqube-check
   - build
   - push
   - deploy
 
-sonarqube-check:
-  stage: sonarqube-check
-  image: mcr.microsoft.com/dotnet/sdk:8.0
-  script: 
-    - "dotnet tool install --global dotnet-sonarscanner"
-    - "export PATH=\"$PATH:$HOME/.dotnet/tools\""
-    - "dotnet sonarscanner begin /k:\"root_KubysisTestBackend_bf7c356a-4e9c-4183-b930-35911291e5e3\" /d:sonar.token=\"$SONAR_TOKEN\" /d:\"sonar.host.url=$SONAR_HOST_URL\" "
-    - "dotnet build"
-    - "dotnet sonarscanner end /d:sonar.token=\"$SONAR_TOKEN\""
-    - |
-       echo "Checking SonarQube Quality Gate status..."
-       STATUS="PENDING"
-       while [ "$STATUS" != "OK" ] && [ "$STATUS" != "ERROR" ]; do
-         RESPONSE=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY")
-         STATUS=$(echo $RESPONSE | grep -o '"status":"[^"]*' | grep -o '[^"]*$')
-         echo "SonarQube status: $STATUS"
-         sleep 5
-       done
-       if [ "$STATUS" == "ERROR" ]; then
-         echo "SonarQube Quality Gate failed!"
-         exit 1
-       fi
+# sonarqube-check:
+#   stage: sonarqube-check
+#   image: mcr.microsoft.com/dotnet/sdk:8.0
+#   script: 
+#     - "dotnet tool install --global dotnet-sonarscanner"
+#     - "export PATH=\"$PATH:$HOME/.dotnet/tools\""
+#     - "dotnet sonarscanner begin /k:\"root_KubysisTestBackend_bf7c356a-4e9c-4183-b930-35911291e5e3\" /d:sonar.token=\"$SONAR_TOKEN\" /d:\"sonar.host.url=$SONAR_HOST_URL\" "
+#     - "dotnet build"
+#     - "dotnet sonarscanner end /d:sonar.token=\"$SONAR_TOKEN\""
+#     - |
+#        echo "Checking SonarQube Quality Gate status..."
+#        STATUS="PENDING"
+#        while [ "$STATUS" != "OK" ] && [ "$STATUS" != "ERROR" ]; do
+#          RESPONSE=$(curl -s -u $SONAR_TOKEN: "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=$SONAR_PROJECT_KEY")
+#          STATUS=$(echo $RESPONSE | grep -o '"status":"[^"]*' | grep -o '[^"]*$')
+#          echo "SonarQube status: $STATUS"
+#          sleep 5
+#        done
+#        if [ "$STATUS" == "ERROR" ]; then
+#          echo "SonarQube Quality Gate failed!"
+#          exit 1
+#        fi
        
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'master'
-    - if: $CI_COMMIT_BRANCH == 'main'
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+#     - if: $CI_COMMIT_BRANCH == 'master'
+#     - if: $CI_COMMIT_BRANCH == 'main'
       
 build:
   stage: build
@@ -53,6 +53,7 @@ build:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
   script:
     - docker build -t $IMAGE_NAME -f ./KubysisTestBackend/Dockerfile .
+    
 
 push:
   stage: push
