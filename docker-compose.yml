@@ -12,7 +12,7 @@ services:
       DOTNET_USE_POLLING_FILE_WATCHER: ${DOTNET_USE_POLLING_FILE_WATCHER:-1}
     volumes:
       - ./vsdbg:/remote_debugger:rw
-      - $HOME/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+      - /c/Users/husey/AppData/Roaming/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - $HOME/.aspnet/https:/root/.aspnet/https:ro
     entrypoint: ["dotnet", "KubysisTestBackend.dll"]
     networks:
