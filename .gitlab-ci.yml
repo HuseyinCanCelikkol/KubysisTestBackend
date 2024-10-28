@@ -72,6 +72,7 @@ deploy:
   - echo "Docker daemon is ready."
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
   script:
-    - docker-compose -f docker-compose.yml pull
-    - docker-compose -f docker-compose.yml up -d
+  - docker-compose -f docker-compose.yml pull
+    # Burada SECRET_KEY'i environment variable olarak ilettik
+  - SECRET_KEY=$SECRET_KEY docker-compose -f docker-compose.yml up -d
 
