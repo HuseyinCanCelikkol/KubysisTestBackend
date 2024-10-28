@@ -41,6 +41,9 @@ builder.Services.AddSwaggerGen(options =>
 	});
 	options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+builder.Configuration.AddUserSecrets<Program>();
+
 builder.Services.AddDbContext<KubysisDbContext>(options =>
 	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<KubysisIdentityDbContext>(options =>

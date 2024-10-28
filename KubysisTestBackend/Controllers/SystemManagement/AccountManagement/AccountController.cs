@@ -9,39 +9,39 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KubysisTestBackend.Controllers.SystemManagement.AccountManagement
 {
-	[Route("[controller]/[action]")]
-	[ApiController]
-	public class AccountController(IAccountService accountService) : ControllerBase
-	{
-		private readonly IAccountService _accountService = accountService;
+    [Route("[controller]/[action]")]
+    [ApiController]
+    public class AccountController(IAccountService accountService, IConfiguration configuration) : ControllerBase
+    {
+        private readonly IConfiguration _configuration = configuration;
+        private readonly IAccountService _accountService = accountService;
 
-		[HttpPost]
-		public async Task<Response> AddUser([FromBody] UserAddDto userAddDto)
-		{
-			return await _accountService.AddUserAsync(userAddDto);
-		}
+        [HttpPost]
+        public async Task<Response> AddUser([FromBody] UserAddDto userAddDto)
+        {
+            return await _accountService.AddUserAsync(userAddDto);
+        }
 
-		[HttpPost]
-		public async Task<Response<string>> GetJwtToken([FromBody] LoginModel loginModel)
-		{
-			return await _accountService.GetJwtTokenAsync(loginModel);
-		}
+        [HttpPost]
+        public async Task<Response<string>> GetJwtToken([FromBody] LoginModel loginModel)
+        {
+            return await _accountService.GetJwtTokenAsync(loginModel);
+        }
 
-		[AllowAnonymous]
-		[HttpPost]
-		public async Task<Response<UserInformationsDto>> Login([FromBody] UserLoginDto userLoginDto)
-		{
-			return await _accountService.LoginAsync(userLoginDto);
-		}
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<Response<UserInformationsDto>> Login([FromBody] UserLoginDto userLoginDto)
+        {
+            return await _accountService.LoginAsync(userLoginDto);
+        }
 
         [AllowAnonymous]
         [HttpGet]
-		public async Task<Response<string>> Deneme()
-		{
-			var res = new Response<string>();
-            var userSecret = Environment.GetEnvironmentVariable("SECRET_KEY");
-			res.Data = userSecret;
-			return res;
+        public Response<string> Deneme()
+        {
+            var res = new Response<string>();
+            res.Data = _configuration["SECRET_KEY"];
+            return res;
         }
-	}
+    }
 }
