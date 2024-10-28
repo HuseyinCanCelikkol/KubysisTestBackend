@@ -6,19 +6,19 @@ using BusinessLayer.Concrete.AccountManagement;
 using BusinessLayer.Concrete.CompanyManagement;
 using BusinessLayer.Concrete.DonationManagement;
 using BusinessLayer.Concrete.SystemManagement.RoleManagement;
+using dotenv.net;
 using EntityLayer;
 using EntityLayer.Entities.UserManagement;
 using KubysisTestBackend.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using KubysisTestBackend.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
+DotEnv.Load();
 var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // Add services to the container.
