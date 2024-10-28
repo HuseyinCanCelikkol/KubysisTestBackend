@@ -32,5 +32,13 @@ namespace KubysisTestBackend.Controllers.SystemManagement.AccountManagement
 		{
 			return await _accountService.LoginAsync(userLoginDto);
 		}
+
+		[HttpGet]
+		public string Deneme()
+		{
+            var userSecret = Environment.GetEnvironmentVariable("SECRET_KEY");
+
+			return userSecret;
+        }
 	}
 }
