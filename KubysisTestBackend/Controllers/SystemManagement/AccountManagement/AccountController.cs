@@ -13,7 +13,6 @@ namespace KubysisTestBackend.Controllers.SystemManagement.AccountManagement
     [ApiController]
     public class AccountController(IAccountService accountService, IConfiguration configuration) : ControllerBase
     {
-        private readonly IConfiguration _configuration = configuration;
         private readonly IAccountService _accountService = accountService;
 
         [HttpPost]
@@ -33,18 +32,6 @@ namespace KubysisTestBackend.Controllers.SystemManagement.AccountManagement
         public async Task<Response<UserInformationsDto>> Login([FromBody] UserLoginDto userLoginDto)
         {
             return await _accountService.LoginAsync(userLoginDto);
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        public Response<string> Deneme()
-        {
-            Response<string> res = new()
-            {
-                Data = Environment.GetEnvironmentVariable("SECRET_KEY")
-            };
-
-            return res;
         }
     }
 }
