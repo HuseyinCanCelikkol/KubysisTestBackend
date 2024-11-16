@@ -2,7 +2,8 @@
 
 namespace Common.DTOs.DonationManagement
 {
-    public record DonationGetDto(string NameAndSurname,
+    public record DonationGetDto(int Id,
+                             string NameAndSurname,
                              DonationType DonationType,
                              DonationClass DonationClass,
                              int Amount,

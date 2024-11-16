@@ -3,7 +3,7 @@
 	public enum DonationStatus
     {
         Notsent=1,
-        PreparingBanner,
+        BannerCompleted,
         Sent,
     }
 }

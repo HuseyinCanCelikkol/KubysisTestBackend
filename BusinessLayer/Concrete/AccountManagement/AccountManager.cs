@@ -4,8 +4,11 @@ using Common.Constant.SystemManagement.RoleManagement;
 using Common.DTOs.AccountManagement;
 using Common.DTOs.UserManagement;
 using Common.Models.AccountManagement;
+using EntityLayer;
+using EntityLayer.Entities.CompanyManagement;
 using EntityLayer.Entities.UserManagement;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,9 +16,10 @@ using System.Text;
 
 namespace BusinessLayer.Concrete.AccountManagement
 {
-    public sealed class AccountManager(UserManager<User> userManager, IConfiguration configuration) : IAccountService
+    public sealed class AccountManager(UserManager<User> userManager, IConfiguration configuration, KubysisDbContext context) : IAccountService
     {
         private readonly UserManager<User> _userManager = userManager;
+        private readonly KubysisDbContext _context = context;
         private readonly IConfiguration _configuration = configuration;
 
         public async Task<Response<UserInformationsDto>> LoginAsync(UserLoginDto userLoginDto)
@@ -29,6 +33,17 @@ namespace BusinessLayer.Concrete.AccountManagement
                     var userRole = await _userManager.GetRolesAsync(user);
 
                     if (userRole == null)
+                    {
+                        return Response<UserInformationsDto>.CreateNotFoundResponse();
+                    }
+
+                    Company? tenantLicenseKey = await _context.Companies.FirstOrDefaultAsync(x => x.Id == user.CompanyId);
+                    if (tenantLicenseKey == null)
+                    {
+                        return Response<UserInformationsDto>.CreateNotFoundResponse();
+                    }
+
+                    if (userLoginDto.LicenseKey != tenantLicenseKey.LicenseKey)
                     {
                         return Response<UserInformationsDto>.CreateNotFoundResponse();
                     }
@@ -55,7 +70,7 @@ namespace BusinessLayer.Concrete.AccountManagement
                     Email = userAddDto.Email,
                     CompanyId = userAddDto.CompanyId
                 };
-                
+
 
                 IdentityResult result = await _userManager.CreateAsync(user, userAddDto.Password);
                 if (!result.Succeeded)
@@ -63,7 +78,7 @@ namespace BusinessLayer.Concrete.AccountManagement
                     return Response.CreateFailureResponse();
                 }
 
-                await _userManager.AddToRoleAsync(user, userAddDto.RoleName);
+                //await _userManager.AddToRoleAsync(user, userAddDto.RoleName);
 
                 return Response.CreateSuccessResponse();
             }

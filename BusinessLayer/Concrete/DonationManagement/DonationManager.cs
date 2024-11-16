@@ -42,5 +42,29 @@ namespace BusinessLayer.Concrete.DonationManagement
                 return Response<List<DonationGetDto>>.CreateServerErrorResponse();
             }
         }
+
+        public async Task<Response> UpdateStatusAsync(UpdateStatusDto dto)
+        {
+            try
+            {
+                Donation? foundDonation = await _context.Donations.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (foundDonation == null)
+                {
+                   return Response.CreateNotFoundResponse();
+                }
+
+                foundDonation.DonationStatus = dto.NewStatus;
+
+                _context.Update(foundDonation);
+                await _context.SaveChangesAsync();
+
+                return Response.CreateSuccessResponse();
+            }
+            catch
+            {
+                return Response.CreateServerErrorResponse();
+            }
+
+        }
     }
 }

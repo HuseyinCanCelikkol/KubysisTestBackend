@@ -22,5 +22,11 @@ namespace KubysisTestBackend.Controllers.DonationManagement
         {
             return await _donationService.GetDonationsByCompanyIdAsync(companyId);
         }
+
+        [HttpPut]
+        public async Task<Response> UpdateStatus([FromBody] UpdateStatusDto dto)
+        {
+            return await _donationService.UpdateStatusAsync(dto);
+        }
     }
 }
