@@ -9,5 +9,6 @@ namespace Common.DTOs.DonationManagement
                              int Amount,
                              string PhoneNumber,
                              DonationStatus DonationStatus,
+                             string Description,
                              DateTime CreateDate);
 }
