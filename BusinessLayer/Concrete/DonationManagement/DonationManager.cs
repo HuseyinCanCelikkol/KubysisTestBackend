@@ -28,6 +28,19 @@ namespace BusinessLayer.Concrete.DonationManagement
             }
         }
 
+        public async Task<Response<DonationGetDto>> GetDonationByIdAsync(int donationId)
+        {
+            try
+            {
+                return Response<DonationGetDto>.CreateSuccessResponse(
+                    _mapper.Map<DonationGetDto>(await _context.Donations.FirstOrDefaultAsync(x => x.Id == donationId))
+                    );
+            }
+            catch
+            {
+                return Response<DonationGetDto>.CreateServerErrorResponse();
+            }
+        }
         public async Task<Response<List<DonationGetDto>>> GetDonationsByCompanyIdAsync(int companyId)
         {
             try
@@ -43,6 +56,33 @@ namespace BusinessLayer.Concrete.DonationManagement
             }
         }
 
+        public async Task<Response> UpdateDonationAsync(DonationUpdateDto dto)
+        {
+            try
+            {
+                Donation? foundDonation = await _context.Donations.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (foundDonation == null)
+                {
+                    return Response.CreateNotFoundResponse();
+                }
+
+                foundDonation.NameAndSurname = dto.NameAndSurname;
+                foundDonation.DonationType = dto.DonationType;
+                foundDonation.DonationClass = dto.DonationClass;
+                foundDonation.Amount = dto.Amount;
+                foundDonation.PhoneNumber = dto.PhoneNumber;
+                foundDonation.DonationStatus = dto.DonationStatus;
+
+                _context.Update(foundDonation);
+                await _context.SaveChangesAsync();
+
+                return Response.CreateSuccessResponse();
+            }
+            catch
+            {
+                return Response.CreateServerErrorResponse();
+            }
+        }
         public async Task<Response> UpdateStatusAsync(UpdateStatusDto dto)
         {
             try
@@ -50,7 +90,7 @@ namespace BusinessLayer.Concrete.DonationManagement
                 Donation? foundDonation = await _context.Donations.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (foundDonation == null)
                 {
-                   return Response.CreateNotFoundResponse();
+                    return Response.CreateNotFoundResponse();
                 }
 
                 foundDonation.DonationStatus = dto.NewStatus;

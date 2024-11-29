@@ -7,6 +7,8 @@ namespace BusinessLayer.Abstract.DonationManagement
     {
         Task<Response> AddDonationAsync(DonationAddDto donationAddDto);
         Task<Response<List<DonationGetDto>>> GetDonationsByCompanyIdAsync(int companyId);
+        Task<Response> UpdateDonationAsync(DonationUpdateDto dto);
         Task<Response> UpdateStatusAsync(UpdateStatusDto dto);
+        Task<Response<DonationGetDto>> GetDonationByIdAsync(int donationId);
     }
 }

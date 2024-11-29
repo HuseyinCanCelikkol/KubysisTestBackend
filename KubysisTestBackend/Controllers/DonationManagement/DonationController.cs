@@ -11,16 +11,28 @@ namespace KubysisTestBackend.Controllers.DonationManagement
     {
         private readonly IDonationService _donationService = donationService;
 
+        [HttpGet]
+        public async Task<Response<List<DonationGetDto>>> GetDonationsByCompanyId([FromQuery] int companyId)
+        {
+            return await _donationService.GetDonationsByCompanyIdAsync(companyId);
+        }
+
+        [HttpGet]
+        public async Task<Response<DonationGetDto>> GetDonationById([FromQuery] int donationId)
+        {
+            return await _donationService.GetDonationByIdAsync(donationId);
+        }
+
         [HttpPost]
         public async Task<Response> AddDonation([FromBody] DonationAddDto donationAddDto)
         {
             return await _donationService.AddDonationAsync(donationAddDto);
         }
 
-        [HttpGet]
-        public async Task<Response<List<DonationGetDto>>> GetDonationsByCompanyId([FromQuery] int companyId)
+        [HttpPut]
+        public async Task<Response> UpdateDonation([FromBody] DonationUpdateDto dto)
         {
-            return await _donationService.GetDonationsByCompanyIdAsync(companyId);
+            return await _donationService.UpdateDonationAsync(dto);
         }
 
         [HttpPut]
@@ -28,5 +40,6 @@ namespace KubysisTestBackend.Controllers.DonationManagement
         {
             return await _donationService.UpdateStatusAsync(dto);
         }
+
     }
 }
